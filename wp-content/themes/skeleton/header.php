@@ -102,14 +102,17 @@ html.ie #author-info {behavior: url("<?php echo get_stylesheet_directory_uri();?
 
 </head>
 <body <?php body_class(); ?>>
+	<div class="header-bg"></div>
 	<div id="wrap" class="container">
 	<div class="resize"></div>
+	
 	<?php
 	st_above_header();
 	st_header();
 	st_below_header();
 	?>
-	<?php st_navbar(); ?>
+
+	<?php //st_navbar(); ?>
 	<?php
 	// Check if this is a post or page, if it has a thumbnail, and if it exceeds defined HEADER_IMAGE_WIDTH
 	if ( is_singular() && current_theme_supports( 'post-thumbnails' ) && has_post_thumbnail( $post->ID ) 

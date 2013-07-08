@@ -132,6 +132,7 @@ function st_registerstyles() {
   	$stylesheets .= wp_enqueue_style('layout', get_bloginfo('template_directory').'/layout.css', 'theme', $version, 'screen, projection');
     $stylesheets .= wp_enqueue_style('formalize', get_bloginfo('template_directory').'/formalize.css', 'theme', $version, 'screen, projection');
     $stylesheets .= wp_enqueue_style('superfish', get_bloginfo('template_directory').'/superfish.css', 'theme', $version, 'screen, projection');
+    $stylesheets .= wp_enqueue_style('custom', get_bloginfo('template_directory').'/custom.css', 'theme', $version, 'screen, projection');
 		if ( class_exists( 'jigoshop' ) ) {
 	  $stylesheets .= wp_enqueue_style('jigoshop', get_bloginfo('template_directory').'/jigoshop.css', 'theme', $version, 'screen, projection');
 		}
@@ -637,9 +638,9 @@ endif;
 
 if ( !function_exists( 'st_above_header' ) ) {
 
-function st_above_header() {
-    do_action('st_above_header');
-}
+	function st_above_header() {
+	    do_action('st_above_header');
+	}
 
 } // endif
 
@@ -647,9 +648,9 @@ function st_above_header() {
 
 if ( !function_exists( 'st_header' ) ) {
 
-function st_header() {
-  do_action('st_header');
-}
+	function st_header() {
+	  do_action('st_header');
+	}
 
 }
 
@@ -658,9 +659,9 @@ function st_header() {
 
 if ( !function_exists( 'st_header_open' ) ) {
 
-function st_header_open() {
-  echo "<div id=\"header\" class=\"sixteen columns\">\n<div class=\"inner\">\n";
-}
+	function st_header_open() {
+	  echo "<div id=\"header\" class=\"sixteen columns\">\n<div class=\"inner\">\n";
+	}
 } // endif
 
 add_action('st_header','st_header_open', 1);
@@ -671,14 +672,14 @@ add_action('st_header','st_header_open', 1);
 
 if ( !function_exists( 'st_header_extras' ) ) {
 
-function st_header_extras() {
-	if (of_get_option('header_extra')) {
-		$extras  = "<div class=\"header_extras\">";
-		$extras .= of_get_option('header_extra');
-		$extras .= "</div>";
-		echo apply_filters ('child_header_extras',$extras);
+	function st_header_extras() {
+		if (of_get_option('header_extra')) {
+			$extras  = "<div class=\"header_extras\">";
+			$extras .= of_get_option('header_extra');
+			$extras .= "</div>";
+			echo apply_filters ('child_header_extras',$extras);
+		}
 	}
-}
 } // endif
 
 add_action('st_header','st_header_extras', 2);
@@ -688,19 +689,19 @@ add_action('st_header','st_header_extras', 2);
 // Child Theme Override: child_logo();
 if ( !function_exists( 'st_logo' ) ) {
 
-function st_logo() {
-	// Displays H1 or DIV based on whether we are on the home page or not (SEO)
-	$heading_tag = ( is_home() || is_front_page() ) ? 'h1' : 'div';
-	if (of_get_option('use_logo_image')) {
-		$class="graphic";
-	} else {
-		$class="text"; 		
+	function st_logo() {
+		// Displays H1 or DIV based on whether we are on the home page or not (SEO)
+		$heading_tag = ( is_home() || is_front_page() ) ? 'h1' : 'div';
+		if (of_get_option('use_logo_image')) {
+			$class="graphic";
+		} else {
+			$class="text"; 		
+		}
+		// echo of_get_option('header_logo')
+		$st_logo  = '<'.$heading_tag.' id="site-title" class="'.$class.'"><a href="'.esc_url( home_url( '/' ) ).'" title="'.esc_attr( get_bloginfo('name','display')).'">'.get_bloginfo('name').'</a></'.$heading_tag.'>'. "\n";
+		$st_logo .= '<span class="site-desc '.$class.'">'.get_bloginfo('description').'</span>'. "\n";
+		echo apply_filters ( 'child_logo' , $st_logo);
 	}
-	// echo of_get_option('header_logo')
-	$st_logo  = '<'.$heading_tag.' id="site-title" class="'.$class.'"><a href="'.esc_url( home_url( '/' ) ).'" title="'.esc_attr( get_bloginfo('name','display')).'">'.get_bloginfo('name').'</a></'.$heading_tag.'>'. "\n";
-	$st_logo .= '<span class="site-desc '.$class.'">'.get_bloginfo('description').'</span>'. "\n";
-	echo apply_filters ( 'child_logo' , $st_logo);
-}
 } // endif
 
 add_action('st_header','st_logo', 3);
@@ -709,12 +710,12 @@ add_action('st_header','st_logo', 3);
 
 if ( !function_exists( 'logostyle' ) ) {
 
-function logostyle() {
-	if (of_get_option('use_logo_image')) {
-	echo '<style type="text/css">
-	#header #site-title.graphic a {background-image: url('.of_get_option('header_logo').');width: '.of_get_option('logo_width').'px;height: '.of_get_option('logo_height').'px;}</style>';
+	function logostyle() {
+		if (of_get_option('use_logo_image')) {
+		echo '<style type="text/css">
+		#header #site-title.graphic a {background-image: url('.of_get_option('header_logo').');width: '.of_get_option('logo_width').'px;height: '.of_get_option('logo_height').'px;}</style>';
+		}
 	}
-}
 
 } //endif
 
@@ -722,14 +723,28 @@ add_action('wp_head', 'logostyle');
 
 
 
-if ( !function_exists( 'st_header_close' ) ) {
+// Navigation (menu)
+if ( !function_exists( 'st_navbar' ) ) {
 
-function st_header_close() {
-	echo "</div></div><!--/#header-->";
-}
+	function st_navbar() {
+		echo '</div><div id="navigation">';
+		wp_nav_menu( array( 'container_class' => 'menu-header', 'theme_location' => 'primary'));
+		echo '</div><!--/#navigation-->';
+	}
+
 } //endif
 
-add_action('st_header','st_header_close', 4);
+add_action(st_header, st_navbar, 4);
+
+
+if ( !function_exists( 'st_header_close' ) ) {
+
+	function st_header_close() {
+		echo "</div><!--/#header-->";
+	}
+} //endif
+
+add_action('st_header','st_header_close', 5);
 
 
 
@@ -737,26 +752,15 @@ add_action('st_header','st_header_close', 4);
 
 if ( !function_exists( 'st_below_header' ) ) {
 
-function st_below_header() {
-    do_action('st_below_header');
-}
+	function st_below_header() {
+	    do_action('st_below_header');
+	}
 
 } //endif
 
 
 // End Header Functions
 
-
-// Navigation (menu)
-if ( !function_exists( 'st_navbar' ) ) {
-
-function st_navbar() {
-	echo '<div id="navigation" class="row sixteen columns">';
-	wp_nav_menu( array( 'container_class' => 'menu-header', 'theme_location' => 'primary'));
-	echo '</div><!--/#navigation-->';
-}
-
-} //endif
 
 // Before Content - st_before_content($columns);
 // Child Theme Override: child_before_content();

@@ -1,0 +1,16 @@
+
+/* Table of Contents
+==================================================
+	
+	
+/* #Site Styles
+================================================== */
+
+body .header-bg{
+	height: 70px;
+	width: 100%;
+	background: RED;
+	position: absolute;
+	top:0;
+	left: 0;
+}
